@@ -84,6 +84,7 @@ export default async function Detalle({ params, searchParams }) {
                       <dl className="dl">
                         <dt>Porcentaje</dt><dd>{s.pago.porcentaje} %</dd>
                         <dt>Forma de pago</dt><dd>{s.pago.forma}</dd>
+                        <dt>Impuestos</dt><dd>{s.pago.impuestos || '—'}</dd>
                         <dt>Detalle</dt><dd style={{ whiteSpace: 'pre-wrap' }}>{s.pago.detalle || '—'}</dd>
                       </dl>
                     )}

@@ -56,7 +56,7 @@ export async function POST(request) {
     oficina: empresa.oficina,
     empresa: { razonSocial: corta(empresa.razonSocial), rnc: soloDigitos(empresa.rnc), proyecto: corta(empresa.proyecto) },
     contacto: { correo: corta(contacto.correo), encargado: corta(contacto.encargado), telefono: corta(contacto.telefono, 40) },
-    pago: { porcentaje: Number(pago.porcentaje), forma: corta(pago.forma), detalle: corta(pago.detalle, 1000) },
+    pago: { porcentaje: Number(pago.porcentaje), forma: corta(pago.forma), impuestos: corta(pago.impuestos), detalle: corta(pago.detalle, 1000) },
     archivos: lista,
   };
 

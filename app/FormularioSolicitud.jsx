@@ -5,6 +5,7 @@ import { upload } from '@vercel/blob/client';
 import {
   REQUISITOS,
   FORMAS_PAGO,
+  IMPUESTOS,
   TIPOS_PERMITIDOS,
   TAMANO_MAXIMO,
   validarDatos,
@@ -103,7 +104,7 @@ function ZonaArchivos({ req, archivos, onAgregar, onQuitar, progreso, bloqueado 
 export default function FormularioSolicitud() {
   const [empresa, setEmpresa] = useState({ oficina: '', razonSocial: '', rnc: '', proyecto: '' });
   const [contacto, setContacto] = useState({ correo: '', encargado: '', telefono: '' });
-  const [pago, setPago] = useState({ porcentaje: '', forma: '', detalle: '' });
+  const [pago, setPago] = useState({ porcentaje: '', forma: '', impuestos: '', detalle: '' });
   const [archivos, setArchivos] = useState(() => Object.fromEntries(REQUISITOS.map((r) => [r.key, []])));
   const [declaracion, setDeclaracion] = useState(false);
   const [tocados, setTocados] = useState({});
@@ -120,7 +121,7 @@ export default function FormularioSolicitud() {
     for (const r of REQUISITOS) {
       if (r.tipo === 'archivo') c[r.key] = archivos[r.key].length > 0;
       if (r.tipo === 'contacto') c[r.key] = !errores.correo && !errores.encargado && !errores.telefono;
-      if (r.tipo === 'pago') c[r.key] = !errores.porcentaje && !errores.forma && !errores.detalle;
+      if (r.tipo === 'pago') c[r.key] = !errores.porcentaje && !errores.forma && !errores.impuestos && !errores.detalle;
     }
     return c;
   }, [archivos, errores]);
@@ -240,7 +241,7 @@ export default function FormularioSolicitud() {
       );
     }
     return (
-      <div className="grid2">
+      <div className="grid3">
         <div className="campo">
           <label htmlFor="porcentaje">Porcentaje (%)</label>
           <input id="porcentaje" className="input" type="number" inputMode="decimal" min="1" max="100" step="0.01" disabled={bloqueado}
@@ -256,6 +257,15 @@ export default function FormularioSolicitud() {
             {FORMAS_PAGO.map((f) => <option key={f} value={f}>{f}</option>)}
           </select>
           {errDe('forma') && <span className="err">{errDe('forma')}</span>}
+        </div>
+        <div className="campo">
+          <label htmlFor="impuestos">Impuestos</label>
+          <select id="impuestos" className="input" disabled={bloqueado} value={pago.impuestos} aria-invalid={!!errDe('impuestos')}
+            onChange={(e) => setPago({ ...pago, impuestos: e.target.value })} onBlur={() => toca('impuestos')}>
+            <option value="">Seleccione…</option>
+            {IMPUESTOS.map((f) => <option key={f} value={f}>{f}</option>)}
+          </select>
+          {errDe('impuestos') && <span className="err">{errDe('impuestos')}</span>}
         </div>
         <div className="campo span2">
           <label htmlFor="detalle">

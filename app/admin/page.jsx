@@ -113,7 +113,7 @@ export default async function Admin({ searchParams }) {
                     <td><b>{s.empresa.razonSocial}</b>{s.empresa.proyecto && <div style={{ color: 'var(--muted)', fontSize: 13 }}>{s.empresa.proyecto}</div>}</td>
                     <td className="mono">{s.empresa.rnc}</td>
                     <td>{s.contacto.encargado}<div style={{ color: 'var(--muted)', fontSize: 13 }}>{s.contacto.correo}</div></td>
-                    <td>{s.pago.porcentaje} %<div style={{ color: 'var(--muted)', fontSize: 13 }}>{s.pago.forma}</div></td>
+                    <td>{s.pago.porcentaje} %<div style={{ color: 'var(--muted)', fontSize: 13 }}>{s.pago.forma}{s.pago.impuestos ? ` · ${s.pago.impuestos}` : ''}</div></td>
                     <td><span className={`estado ${claseEstado(s.estado)}`}>{s.estado}</span></td>
                   </tr>
                 ))}
