@@ -259,7 +259,7 @@ export default function FormularioSolicitud() {
         </div>
         <div className="campo span2">
           <label htmlFor="detalle">
-            Detalle de pago {pago.forma === 'Otra' ? '' : <span className="opc">(opcional)</span>}
+            Detalle de pago <span className="opc">(opcional)</span>
           </label>
           <textarea id="detalle" className="input" disabled={bloqueado} placeholder="Ej.: 30 % de avance a la firma, el resto contra cubicaciones."
             value={pago.detalle} aria-invalid={!!errDe('detalle')}
