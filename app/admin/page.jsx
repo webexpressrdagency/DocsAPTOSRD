@@ -38,7 +38,14 @@ export default async function Admin({ searchParams }) {
   if (!(await esAdmin())) return <Login error={sp?.error} />;
 
   const filtro = ESTADOS.includes(sp?.estado) ? sp.estado : '';
-  const todas = await listarSolicitudes();
+  let todas = [];
+  let fallaAlmacen = null;
+  try {
+    todas = await listarSolicitudes();
+  } catch (e) {
+    console.error('No se pudo leer el almacenamiento de expedientes:', e);
+    fallaAlmacen = String(e?.message || e).slice(0, 300);
+  }
   const solicitudes = filtro ? todas.filter((s) => s.estado === filtro) : todas;
   const conteo = Object.fromEntries(ESTADOS.map((e) => [e, todas.filter((s) => s.estado === e).length]));
 
@@ -72,10 +79,21 @@ export default async function Admin({ searchParams }) {
             ))}
           </div>
         </nav>
+        {fallaAlmacen && (
+          <div className="alerta mal" role="alert" style={{ marginBottom: 16 }}>
+            <b>No se pudo leer el almacenamiento de documentos.</b>
+            <ul style={{ margin: '8px 0 0', paddingLeft: 18 }}>
+              <li>Variable BLOB_READ_WRITE_TOKEN: {process.env.BLOB_READ_WRITE_TOKEN ? 'presente' : 'FALTA. Conecte el Blob al proyecto (Storage → Connect Store) y haga Redeploy.'}</li>
+              <li>Detalle: {fallaAlmacen}</li>
+            </ul>
+          </div>
+        )}
         <div className="tabla-wrap">
           {solicitudes.length === 0 ? (
             <div className="vacio">
-              {todas.length === 0
+              {fallaAlmacen
+                ? 'No hay datos que mostrar mientras el almacenamiento no responda.'
+                : todas.length === 0
                 ? 'Todavía no hay expedientes. Aparecerán aquí en cuanto alguien envíe el formulario.'
                 : 'No hay expedientes con este estado.'}
             </div>
